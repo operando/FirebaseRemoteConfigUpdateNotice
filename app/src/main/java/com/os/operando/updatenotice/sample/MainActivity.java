@@ -1,5 +1,6 @@
 package com.os.operando.updatenotice.sample;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         RemoteConfig.getUpdateNoticeConfig(this)
                 .filter(value -> !TextUtils.isEmpty(value))
                 .flatMap(UpdateNotice::parseJson)
+                .filter(value -> getSharedPreferences("update_notice", Context.MODE_PRIVATE).getInt("showed_update_notice_version", 0) < value.updateApplicationVersion)
                 .filter(value -> BuildConfig.VERSION_CODE < value.updateApplicationVersion)
                 .ifPresent(this::showUpdateDialog);
     }
@@ -34,5 +36,10 @@ public class MainActivity extends AppCompatActivity {
 
                 })
                 .show();
+
+        getSharedPreferences("update_notice", Context.MODE_PRIVATE)
+                .edit()
+                .putInt("showed_update_notice_version", updateNotice.updateApplicationVersion)
+                .apply();
     }
 }
