@@ -45,7 +45,7 @@ public class RemoteConfig {
 
     public static Optional<String> getUpdateNoticeConfig(Context context) {
         return getRemoteConfig(context)
-                .map(firebaseRemoteConfig -> firebaseRemoteConfig.getString("update_notice_config"));
+                .map(firebaseRemoteConfig -> firebaseRemoteConfig.getString("android_update_notice_config"));
     }
 
     private static Optional<FirebaseRemoteConfig> getRemoteConfig(Context context) {
